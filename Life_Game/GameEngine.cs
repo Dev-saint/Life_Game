@@ -9,20 +9,40 @@ namespace Life_Game
     public class GameEngine
     {
         public uint currentGeneration { get; private set; }
-        private bool[,] field;
+        private int[,] field;
         private readonly int rows;
         private readonly int cols;
 
-        public GameEngine(int rows, int cols, int density)
+        public GameEngine(int rows, int cols, int densityPlantsEating, 
+            int densityPredators, int densityFood, int densityPoison)
         {
             this.rows = rows;
             this.cols = cols;
-            field = new bool[cols, rows];
+            int check = 0;
+            int density = 0;
+            field = new int[cols, rows];
             Random random = new Random();
 
-            for (int x = 0; x < cols; x++)
-                for (int y = 0; y < rows; y++)
-                    field[x, y] = random.Next(density) == 0;
+            // Цикл заполнения матрицы
+            for (int type = 1; type < 5; type++)
+            {
+                if (type == 1) density = densityPlantsEating;
+                else
+                    if (type == 2) density = densityPredators;
+                else
+                    if (type == 3) density = densityFood;
+                else
+                    if (type == 4) density = densityPoison;
+
+                for (int x = 0; x < cols; x++)
+                    for (int y = 0; y < rows; y++)
+                    {
+                        check = random.Next(density);
+                        if (check == 0 && field[x, y] == 0)
+                            field[x, y] = type;  // 0 - мертвая, 1 - травоядная,
+                                                 // 2 - хищник, 3 - растение, 4 - яд
+                    }
+            }
         }
 
         public void NextGeneration()

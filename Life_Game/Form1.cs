@@ -26,15 +26,18 @@ namespace Life_Game
             if (timer1.Enabled)
                 return;
 
-            numericUpDown_Density.Enabled = false;
+            numericUpDown_DensityPlantsEating.Enabled = false;
             numericUpDown_Resolution.Enabled = false;
+            numericUpDown_DensityPredators.Enabled = false;
+            numericUpDown_DensityFood.Enabled = false;
+            numericUpDown_DensityPoison.Enabled = false;
             resolution = (int)numericUpDown_Resolution.Value;
 
             gameEngine = new GameEngine
             (
                 rows: pictureBox1.Height / resolution,
                 cols: pictureBox1.Width / resolution,
-                density: (int)numericUpDown_Density.Minimum + (int)numericUpDown_Density.Maximum - (int)numericUpDown_Density.Value
+                density: (int)numericUpDown_DensityPlantsEating.Minimum + (int)numericUpDown_DensityPlantsEating.Maximum - (int)numericUpDown_DensityPlantsEating.Value
             );
 
             Text = $"Поколение {gameEngine.currentGeneration}";
@@ -71,7 +74,7 @@ namespace Life_Game
             if (timer1.Enabled)
             {
                 timer1.Stop();
-                numericUpDown_Density.Enabled = true;
+                numericUpDown_DensityPlantsEating.Enabled = true;
                 numericUpDown_Resolution.Enabled = true;
             }
         }

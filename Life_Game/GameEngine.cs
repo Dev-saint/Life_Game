@@ -12,9 +12,10 @@ namespace Life_Game
         private int[,] field;
         private readonly int rows;
         private readonly int cols;
+        private int foodBirthChance;
 
         public GameEngine(int rows, int cols, int densityPlantsEating, 
-            int densityPredators, int densityFood, int densityPoison)
+            int densityPredators, int densityFood, int densityPoison, int foodBirthChance)
         {
             this.rows = rows;
             this.cols = cols;
@@ -34,32 +35,55 @@ namespace Life_Game
                 else
                     if (type == 4) density = densityPoison;
 
+                this.foodBirthChance = foodBirthChance;
+
                 for (int x = 0; x < cols; x++)
                     for (int y = 0; y < rows; y++)
                     {
-                        check = random.Next(density);
-                        if (check == 0 && field[x, y] == 0)
-                            field[x, y] = type;  // 0 - мертвая, 1 - травоядная,
-                                                 // 2 - хищник, 3 - растение, 4 - яд
+                        if (field[x, y] == 0)
+                        {
+                            check = random.Next(density);
+                            if (check == 0)
+                                field[x, y] = type;  // 0 - мертвая, 1 - травоядная,
+                                                     // 2 - хищник, 3 - еда, 4 - яд
+                        }
                     }
             }
         }
 
         public void NextGeneration()
         {
-            var newField = new bool[cols, rows];
+            var newField = new int[cols, rows];
+            Random random = new Random();
 
             for (int x = 0; x < cols; x++)
             {
                 for (int y = 0; y < rows; y++)
                 {
-                    var NeighboursCount = CountNeighbours(x, y);
-                    var hasLife = field[x, y];
+                    var PlantsEatingNeighboursCount = CountNeighbours(x, y, 1);
+                    var PredatorsNeighboursCount = CountNeighbours(x, y, 2);
+                    var PoisonNeighboursCount = CountNeighbours(x, y, 4);
 
-                    if (!hasLife && NeighboursCount == 3)
-                        newField[x, y] = true;
-                    else if (hasLife && (NeighboursCount < 2 || NeighboursCount > 3))
-                        newField[x, y] = false;
+                    if (field[x, y] == 3 && PlantsEatingNeighboursCount == 1)
+                        newField[x, y] = 1;
+                    else if (field[x, y] == 1
+                        && (PlantsEatingNeighboursCount < 1 || PlantsEatingNeighboursCount > 3))
+                        newField[x, y] = 0;
+                    else
+                        if (field[x, y] == 1 && PredatorsNeighboursCount >= 1)
+                        newField[x, y] = 2;
+                    else
+                        if ((field[x, y] == 1 || field[x, y] == 2) && PoisonNeighboursCount >= 1)
+                        newField[x, y] = 0;
+                    else
+                    if (field[x, y] == 2 && (PredatorsNeighboursCount < 1 || PredatorsNeighboursCount > 3))
+                        newField[x, y] = 0;
+                    else
+                        if (field[x, y] == 0)
+                    {
+                        if (random.Next(this.foodBirthChance) == 0)
+                            newField[x, y] = 3;
+                    }
                     else
                         newField[x, y] = field[x, y];
                 }
@@ -68,9 +92,9 @@ namespace Life_Game
             currentGeneration++;
         }
 
-        public bool[,] GetCurrentGeneration()
+        public int[,] GetCurrentGeneration()
         {
-            var result = new bool[cols, rows];
+            var result = new int[cols, rows];
             for (int x = 0; x < cols; x++)
             {
                 for (int y = 0; y < rows; y++)
@@ -81,7 +105,7 @@ namespace Life_Game
             return result;
         }
 
-        private int CountNeighbours(int x, int y)
+        private int CountNeighbours(int x, int y, int code)
         {
             int count = 0;
 
@@ -93,9 +117,8 @@ namespace Life_Game
                     var row = (y + j + rows) % rows;
 
                     var isSelfChecking = col == x && row == y;
-                    var hasLife = field[col, row];
 
-                    if (hasLife && !isSelfChecking)
+                    if (field[col, row] == code && !isSelfChecking)
                         count++;
                 }
             }
@@ -108,20 +131,21 @@ namespace Life_Game
             return x >= 0 && y >= 0 && x < cols && y < rows;
         }
 
-        private void UpdateCell(int x, int y, bool state)
+        private void UpdateCell(int x, int y, int state)
         {
             if (ValidateCellPosition(x, y))
                 field[x, y] = state;
         }
 
-        public void AddCell(int x, int y)
+        public void AddCell(int x, int y, int type)
         {
-            UpdateCell(x, y, state: true);
+            if (field[x, y] == 0)
+                UpdateCell(x, y, state: type);
         }
 
         public void RemoveCell(int x, int y)
         {
-            UpdateCell(x, y, state: false);
+            UpdateCell(x, y, state: 0);
         }
     }
 }

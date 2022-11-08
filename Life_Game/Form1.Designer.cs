@@ -32,6 +32,7 @@ namespace Life_Game
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.listBoxTypesOfCells = new System.Windows.Forms.ListBox();
             this.pictureBoxStop = new System.Windows.Forms.PictureBox();
             this.pictureBoxStart = new System.Windows.Forms.PictureBox();
             this.numericUpDown_FoodBirth = new System.Windows.Forms.NumericUpDown();
@@ -48,7 +49,6 @@ namespace Life_Game
             this.label2 = new System.Windows.Forms.Label();
             this.numericUpDown_Resolution = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
-            this.listBoxTypesOfCells = new System.Windows.Forms.ListBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -103,6 +103,21 @@ namespace Life_Game
             this.splitContainer1.SplitterDistance = 240;
             this.splitContainer1.TabIndex = 0;
             // 
+            // listBoxTypesOfCells
+            // 
+            this.listBoxTypesOfCells.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.listBoxTypesOfCells.FormattingEnabled = true;
+            this.listBoxTypesOfCells.ItemHeight = 20;
+            this.listBoxTypesOfCells.Items.AddRange(new object[] {
+            "Травоядные",
+            "Хищники",
+            "Растительная еда",
+            "Яд"});
+            this.listBoxTypesOfCells.Location = new System.Drawing.Point(72, 415);
+            this.listBoxTypesOfCells.Name = "listBoxTypesOfCells";
+            this.listBoxTypesOfCells.Size = new System.Drawing.Size(166, 124);
+            this.listBoxTypesOfCells.TabIndex = 19;
+            // 
             // pictureBoxStop
             // 
             this.pictureBoxStop.Cursor = System.Windows.Forms.Cursors.Hand;
@@ -130,8 +145,8 @@ namespace Life_Game
             // numericUpDown_FoodBirth
             // 
             this.numericUpDown_FoodBirth.Location = new System.Drawing.Point(10, 286);
-            this.numericUpDown_FoodBirth.Minimum = new decimal(new int[] {
-            15,
+            this.numericUpDown_FoodBirth.Maximum = new decimal(new int[] {
+            20,
             0,
             0,
             0});
@@ -140,7 +155,7 @@ namespace Life_Game
             this.numericUpDown_FoodBirth.TabIndex = 17;
             this.numericUpDown_FoodBirth.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown_FoodBirth.Value = new decimal(new int[] {
-            15,
+            5,
             0,
             0,
             0});
@@ -159,7 +174,7 @@ namespace Life_Game
             // 
             this.numericUpDown_DensityPoison.Location = new System.Drawing.Point(10, 226);
             this.numericUpDown_DensityPoison.Maximum = new decimal(new int[] {
-            15,
+            10,
             0,
             0,
             0});
@@ -187,7 +202,7 @@ namespace Life_Game
             // 
             this.numericUpDown_DensityFood.Location = new System.Drawing.Point(10, 183);
             this.numericUpDown_DensityFood.Maximum = new decimal(new int[] {
-            25,
+            10,
             0,
             0,
             0});
@@ -201,7 +216,7 @@ namespace Life_Game
             this.numericUpDown_DensityFood.TabIndex = 12;
             this.numericUpDown_DensityFood.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown_DensityFood.Value = new decimal(new int[] {
-            10,
+            5,
             0,
             0,
             0});
@@ -220,7 +235,7 @@ namespace Life_Game
             // 
             this.numericUpDown_DensityPredators.Location = new System.Drawing.Point(10, 140);
             this.numericUpDown_DensityPredators.Maximum = new decimal(new int[] {
-            25,
+            30,
             0,
             0,
             0});
@@ -234,7 +249,7 @@ namespace Life_Game
             this.numericUpDown_DensityPredators.TabIndex = 10;
             this.numericUpDown_DensityPredators.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown_DensityPredators.Value = new decimal(new int[] {
-            10,
+            15,
             0,
             0,
             0});
@@ -286,7 +301,7 @@ namespace Life_Game
             // 
             this.numericUpDown_DensityPlantsEating.Location = new System.Drawing.Point(10, 80);
             this.numericUpDown_DensityPlantsEating.Maximum = new decimal(new int[] {
-            25,
+            30,
             0,
             0,
             0});
@@ -300,7 +315,7 @@ namespace Life_Game
             this.numericUpDown_DensityPlantsEating.TabIndex = 4;
             this.numericUpDown_DensityPlantsEating.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numericUpDown_DensityPlantsEating.Value = new decimal(new int[] {
-            10,
+            15,
             0,
             0,
             0});
@@ -347,21 +362,6 @@ namespace Life_Game
             this.label1.Size = new System.Drawing.Size(85, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "Разрешение";
-            // 
-            // listBoxTypesOfCells
-            // 
-            this.listBoxTypesOfCells.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.listBoxTypesOfCells.FormattingEnabled = true;
-            this.listBoxTypesOfCells.ItemHeight = 20;
-            this.listBoxTypesOfCells.Items.AddRange(new object[] {
-            "Травоядные",
-            "Хищники",
-            "Растительная еда",
-            "Яд"});
-            this.listBoxTypesOfCells.Location = new System.Drawing.Point(72, 415);
-            this.listBoxTypesOfCells.Name = "listBoxTypesOfCells";
-            this.listBoxTypesOfCells.Size = new System.Drawing.Size(166, 124);
-            this.listBoxTypesOfCells.TabIndex = 19;
             // 
             // pictureBox1
             // 
@@ -411,7 +411,7 @@ namespace Life_Game
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.NumericUpDown numericUpDown_Resolution;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        public System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.NumericUpDown numericUpDown_DensityPlantsEating;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Timer timer1;

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,9 +12,10 @@ namespace Life_Game
 {
     public partial class Form1 : Form
     {
-        private Graphics graphics;
-        private int resolution;
-        private GameEngine gameEngine;
+        
+        public int resolution;
+        public GameEngine gameEngine;
+        public Field field;
 
         public Form1()
         {
@@ -34,23 +35,24 @@ namespace Life_Game
             numericUpDown_FoodBirth.Enabled = false;
             resolution = (int)numericUpDown_Resolution.Value;
 
+            field = new Field(this, resolution);
+
             gameEngine = new GameEngine
-            (
-                rows: pictureBox1.Height / resolution,
-                cols: pictureBox1.Width / resolution,
-                densityPlantsEating: (int)numericUpDown_DensityPlantsEating.Minimum + (int)numericUpDown_DensityPlantsEating.Maximum - (int)numericUpDown_DensityPlantsEating.Value,
-                densityPredators: (int)numericUpDown_DensityPredators.Minimum + (int)numericUpDown_DensityPredators.Maximum - (int)numericUpDown_DensityPredators.Value,
-                densityFood: (int)numericUpDown_DensityFood.Minimum + (int)numericUpDown_DensityFood.Maximum - (int)numericUpDown_DensityFood.Value,
-                densityPoison: (int)numericUpDown_DensityPoison.Minimum + (int)numericUpDown_DensityPoison.Maximum - (int)numericUpDown_DensityPoison.Value,
-                foodBirthChance: (int)numericUpDown_FoodBirth.Minimum + (int)numericUpDown_FoodBirth.Maximum - (int)numericUpDown_FoodBirth.Value
-            );
+                (
+                    rows: pictureBox1.Height / resolution,
+                    cols: pictureBox1.Width / resolution,
+                    densityPlantsEating: (int)numericUpDown_DensityPlantsEating.Minimum + (int)numericUpDown_DensityPlantsEating.Maximum - (int)numericUpDown_DensityPlantsEating.Value,
+                    densityPredators: (int)numericUpDown_DensityPredators.Minimum + (int)numericUpDown_DensityPredators.Maximum - (int)numericUpDown_DensityPredators.Value,
+                    densityFood: (int)numericUpDown_DensityFood.Minimum + (int)numericUpDown_DensityFood.Maximum - (int)numericUpDown_DensityFood.Value,
+                    densityPoison: (int)numericUpDown_DensityPoison.Minimum + (int)numericUpDown_DensityPoison.Maximum - (int)numericUpDown_DensityPoison.Value,
+                    foodBirthChance: (int)numericUpDown_FoodBirth.Minimum + (int)numericUpDown_FoodBirth.Maximum - (int)numericUpDown_FoodBirth.Value
+                );
 
             Text = $"Поколение {gameEngine.currentGeneration}";
 
             listBoxTypesOfCells.SelectedIndex = 0;
 
-            pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            graphics = Graphics.FromImage(pictureBox1.Image);
+            field.CreateField();
 
             timer1.Interval = (int)numericUpDown_Timer.Value * 5;
             timer1.Start();
@@ -58,26 +60,8 @@ namespace Life_Game
 
         private void DrawNextGeneration()
         {
-            graphics.Clear(Color.Black);
-
-            var field = gameEngine.GetCurrentGeneration();
-
-            for (int x = 0; x < field.GetLength(0); x++)
-            {
-                for (int y = 0; y < field.GetLength(1); y++)
-                {
-                    if (field[x, y] == 1)
-                        graphics.FillRectangle(Brushes.Blue, x * resolution, y * resolution, resolution - 1, resolution - 1);
-                    if (field[x, y] == 2)
-                        graphics.FillRectangle(Brushes.Crimson, x * resolution, y * resolution, resolution - 1, resolution - 1);
-                    if (field[x, y] == 3)
-                        graphics.FillRectangle(Brushes.LawnGreen, x * resolution, y * resolution, resolution - 1, resolution - 1);
-                    if (field[x, y] == 4)
-                        graphics.FillRectangle(Brushes.Purple, x * resolution, y * resolution, resolution - 1, resolution - 1);
-                }
-            }
-
-            pictureBox1.Refresh();
+            var field_ = gameEngine.GetCurrentGeneration();
+            field.DrawNextGenerationField(field_);
             Text = $"Поколение {gameEngine.currentGeneration}";
             gameEngine.NextGeneration();
         }

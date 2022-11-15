@@ -7,20 +7,20 @@ using System.Drawing;
 
 namespace Life_Game
 {
-    public class Field
+    public class Field : GameEngine
     {
         public int x;
         public int y;
         private Graphics graphics;
         private Form1 form;
-        private int resolution;
 
-        public Field(Form1 form, int resolution)
+        public Field(Form1 form, GameEngine gameEngine)
         {
             x = 0;
             y = 0;
-            this.form = form;
-            this.resolution = resolution;
+            //this.form = form;
+            resolution = form.Resolution;
+            field_ = gameEngine.Field_;
         }
 
         public void CreateField()
@@ -29,27 +29,32 @@ namespace Life_Game
             graphics = Graphics.FromImage(form.pictureBox1.Image);
         }
 
-        public void DrawNextGenerationField(int[,] field_)
+        public void DrawNextGenerationField()
         {
             graphics.Clear(Color.Black);
-
-            for (int x = 0; x < field_.GetLength(0); x++)
-            {
-                for (int y = 0; y < field_.GetLength(1); y++)
+            
+            for (x = 0; x < cols; x++)
+                for (y = 0; y < rows; y++)
                 {
-                    if (field_[x, y] == 1)
-                        graphics.FillRectangle(Brushes.Blue, x * resolution, y * resolution, resolution - 1, resolution - 1);
-                    if (field_[x, y] == 2)
-                        graphics.FillRectangle(Brushes.Crimson, x * resolution, y * resolution, resolution - 1, resolution - 1);
-                    if (field_[x, y] == 3)
-                        graphics.FillRectangle(Brushes.LawnGreen, x * resolution, y * resolution, resolution - 1, resolution - 1);
-                    if (field_[x, y] == 4)
-                        graphics.FillRectangle(Brushes.Purple, x * resolution, y * resolution, resolution - 1, resolution - 1);
+                    if (plants_Eating.CheckType(field_[x, y]))
+                        graphics.FillRectangle(plants_Eating.color, x * resolution, y * resolution, resolution - 1, resolution - 1);
+                    else
+                    if (predator.CheckType(field_[x,y]))
+                        graphics.FillRectangle(predator.color, x * resolution, y * resolution, resolution - 1, resolution - 1);
+                    else
+                    if (food.CheckType(field_[x, y]))
+                        graphics.FillRectangle(food.color, x * resolution, y * resolution, resolution - 1, resolution - 1);
+                    else
+                    if (poison.CheckType(field_[x, y]))
+                        graphics.FillRectangle(poison.color, x * resolution, y * resolution, resolution - 1, resolution - 1);
                 }
-            }
 
             form.pictureBox1.Refresh();
         }
-        
+
+        ~Field()
+        {
+
+        }
     }
 }

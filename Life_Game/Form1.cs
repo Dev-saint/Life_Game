@@ -7,15 +7,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Life_Game
 {
     public partial class Form1 : Form
     {
-        
-        public int resolution;
-        public GameEngine gameEngine;
-        public Field field;
+
+        protected int resolution;
+        private int densityPlantsEating;
+        private int densityPredators;
+        private int densityFood;
+        private int densityPoison;
+        private int foodBirthChance;
+        protected int cols;
+        protected int rows;
+        protected GameEngine gameEngine;
+        protected Field field;
+        protected Cell dead_cell;
+        protected Plants_Eating plants_Eating;
+        protected Predator predator;
+        protected Food food;
+        protected Poison poison;
+
+        public Plants_Eating Plants_Eating { get => plants_Eating; set => plants_Eating = value; }
+        public Predator Predator { get => predator; set => predator = value; }
+        public Food Food { get => food; set => food = value; }
+        public Poison Poison { get => poison; set => poison = value; }
+        public int Cols { get => cols; set => cols = value; }
+        public int Rows { get => rows; set => rows = value; }
+        public int Resolution { get => resolution; set => resolution = value; }
 
         public Form1()
         {
@@ -35,18 +56,23 @@ namespace Life_Game
             numericUpDown_FoodBirth.Enabled = false;
             resolution = (int)numericUpDown_Resolution.Value;
 
-            field = new Field(this, resolution);
+            densityPlantsEating = (int)numericUpDown_DensityPlantsEating.Minimum + (int)numericUpDown_DensityPlantsEating.Maximum - (int)numericUpDown_DensityPlantsEating.Value;
+            densityPredators = (int)numericUpDown_DensityPredators.Minimum + (int)numericUpDown_DensityPredators.Maximum - (int)numericUpDown_DensityPredators.Value;
+            densityFood = (int)numericUpDown_DensityFood.Minimum + (int)numericUpDown_DensityFood.Maximum - (int)numericUpDown_DensityFood.Value;
+            densityPoison = (int)numericUpDown_DensityPoison.Minimum + (int)numericUpDown_DensityPoison.Maximum - (int)numericUpDown_DensityPoison.Value;
+            foodBirthChance = (int)numericUpDown_FoodBirth.Minimum + (int)numericUpDown_FoodBirth.Maximum - (int)numericUpDown_FoodBirth.Value;
+            rows = pictureBox1.Height / resolution;
+            cols = pictureBox1.Width / resolution;
 
-            gameEngine = new GameEngine
-                (
-                    rows: pictureBox1.Height / resolution,
-                    cols: pictureBox1.Width / resolution,
-                    densityPlantsEating: (int)numericUpDown_DensityPlantsEating.Minimum + (int)numericUpDown_DensityPlantsEating.Maximum - (int)numericUpDown_DensityPlantsEating.Value,
-                    densityPredators: (int)numericUpDown_DensityPredators.Minimum + (int)numericUpDown_DensityPredators.Maximum - (int)numericUpDown_DensityPredators.Value,
-                    densityFood: (int)numericUpDown_DensityFood.Minimum + (int)numericUpDown_DensityFood.Maximum - (int)numericUpDown_DensityFood.Value,
-                    densityPoison: (int)numericUpDown_DensityPoison.Minimum + (int)numericUpDown_DensityPoison.Maximum - (int)numericUpDown_DensityPoison.Value,
-                    foodBirthChance: (int)numericUpDown_FoodBirth.Minimum + (int)numericUpDown_FoodBirth.Maximum - (int)numericUpDown_FoodBirth.Value
-                );
+            field = new Field(this, gameEngine);
+
+            dead_cell = new Cell(gameEngine);
+            plants_Eating = new Plants_Eating(1, densityPlantsEating, Brushes.Blue);
+            predator = new Predator(2, densityPredators, Brushes.Crimson);
+            food = new Food(3, densityFood, Brushes.LawnGreen, foodBirthChance);
+            poison = new Poison(4, densityPoison, Brushes.Purple);
+
+            gameEngine = new GameEngine(this); 
 
             Text = $"Поколение {gameEngine.currentGeneration}";
 
@@ -60,8 +86,8 @@ namespace Life_Game
 
         private void DrawNextGeneration()
         {
-            var field_ = gameEngine.GetCurrentGeneration();
-            field.DrawNextGenerationField(field_);
+            //var field_ = gameEngine.GetCurrentGeneration();
+            field.DrawNextGenerationField();
             Text = $"Поколение {gameEngine.currentGeneration}";
             gameEngine.NextGeneration();
         }

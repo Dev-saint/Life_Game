@@ -3,101 +3,108 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace Life_Game
 {
     public class GameEngine : Form1
     {
         public uint currentGeneration { get; private set; }
-        private int[,] field_;
-        private int foodBirthChance;
-        private /*readonly*/ int rows;
-        private /*readonly*/ int cols;
+        protected int[,] field_;
 
+        public int[,] Field_ { get => field_; set => field_ = value; }
+     
         public GameEngine()
         {
-            rows = 0;
-            cols = 0;
-            foodBirthChance = 0;
-            field_ = null;
-            currentGeneration = 0;
+
         }
 
-        public GameEngine(int rows, int cols, int densityPlantsEating, 
-            int densityPredators, int densityFood, int densityPoison, int foodBirthChance)
+        public GameEngine(Form1 form)
         {
-            this.rows = rows;
-            this.cols = cols;
-            int check = 0;
+            cols = form.Cols;
+            rows = form.Rows;
+            plants_Eating = form.Plants_Eating;
+            predator = form.Predator;
+            food = form.Food;
+            poison = form.Poison;
+            int check;
             int density = 0;
             field_ = new int[cols, rows];
             Random random = new Random();
 
             // Цикл заполнения матрицы
+            // 0 - мертвая, 1 - травоядная, 2 - хищник, 3 - еда, 4 - яд
             for (int type = 1; type < 5; type++)
             {
-                if (type == 1) density = densityPlantsEating;
+                if (plants_Eating.CheckType(type)) density = plants_Eating.density;
                 else
-                    if (type == 2) density = densityPredators;
+                    if (predator.CheckType(type)) density = predator.density;
                 else
-                    if (type == 3) density = densityFood;
+                    if (food.CheckType(type)) density = food.density;
                 else
-                    if (type == 4) density = densityPoison;
-
-                this.foodBirthChance = foodBirthChance;
+                    if (poison.CheckType(type)) density = poison.density;
 
                 for (int x = 0; x < cols; x++)
                     for (int y = 0; y < rows; y++)
-                    {
-                        if (field_[x, y] == 0)
+                        if (dead_cell.CheckType(field_[x, y]))
                         {
                             check = random.Next(density);
                             if (check == 0)
-                                field_[x, y] = type;  // 0 - мертвая, 1 - травоядная,
-                                                     // 2 - хищник, 3 - еда, 4 - яд
+                            {
+                                if (plants_Eating.CheckType(type))
+                                    field_[x, y] = plants_Eating.type;
+                                else
+                                    if (predator.CheckType(type))
+                                    field_[x, y] = predator.type;
+                                else
+                                    if (food.CheckType(type))
+                                    field_[x, y] = food.type;
+                                else
+                                    if (poison.CheckType(type))
+                                    field_[x, y] = poison.type;
+                            }
                         }
-                    }
             }
         }
 
         public void NextGeneration()
         {
-            var newField = new int[cols, rows];
+            var new_field = new int[cols, rows];
             Random random = new Random();
 
             for (int x = 0; x < cols; x++)
             {
                 for (int y = 0; y < rows; y++)
                 {
-                    var PlantsEatingNeighboursCount = CountNeighbours(x, y, 1);
-                    var PredatorsNeighboursCount = CountNeighbours(x, y, 2);
-                    var PoisonNeighboursCount = CountNeighbours(x, y, 4);
+                    var PlantsEatingNeighboursCount = dead_cell.CountNeighbours(x,y, plants_Eating.type);
+                    var PredatorsNeighboursCount = dead_cell.CountNeighbours(x, y, predator.type);
+                    var PoisonNeighboursCount = dead_cell.CountNeighbours(x, y, poison.type);
 
-                    if (field_[x, y] == 3 && PlantsEatingNeighboursCount >= 1)
-                        newField[x, y] = 1;
-                    else if (field_[x, y] == 1
+                    if (food.CheckType(field_[x,y]) && PlantsEatingNeighboursCount >= 1)
+                        new_field[x,y] = plants_Eating.type;
+                    else if (plants_Eating.CheckType(field_[x,y])
                         && (PlantsEatingNeighboursCount < 1 || PlantsEatingNeighboursCount > 4))
-                        newField[x, y] = 0;
+                        new_field[x, y] = dead_cell.type;
                     else
-                        if (field_[x, y] == 1 && PredatorsNeighboursCount >= 1)
-                        newField[x, y] = 2;
+                        if (plants_Eating.CheckType(field_[x, y]) && PredatorsNeighboursCount >= 1)
+                        new_field[x, y] = predator.type;
                     else
-                        if ((field_[x, y] == 1 || field_[x, y] == 2) && PoisonNeighboursCount >= 1)
-                        newField[x, y] = 0;
+                        if ((plants_Eating.CheckType(field_[x, y]) || predator.CheckType(field_[x,y])) && PoisonNeighboursCount >= 1)
+                        new_field[x, y] = dead_cell.type;
                     else
-                    if (field_[x, y] == 2 && (PredatorsNeighboursCount < 1 || PredatorsNeighboursCount > 3))
-                        newField[x, y] = 0;
+                    if (predator.CheckType(field_[x, y]) && (PredatorsNeighboursCount < 1 || PredatorsNeighboursCount > 3))
+                        new_field[x, y] = dead_cell.type;
                     else
-                        if (field_[x, y] == 0)
+                        if (dead_cell.CheckType(field_[x,y]))
                     {
-                        if (random.Next(this.foodBirthChance) == 0)
-                            newField[x, y] = 3;
+                        if (random.Next(food.BirthChance) == 0)
+                            new_field[x,y] = food.type;
                     }
                     else
-                        newField[x, y] = field_[x, y];
+                        new_field[x,y] = field_[x, y];
                 }
             }
-            field_ = newField;
+            field_ = new_field;
             currentGeneration++;
         }
 
@@ -112,27 +119,6 @@ namespace Life_Game
                 }
             }
             return result;
-        }
-
-        private int CountNeighbours(int x, int y, int code)
-        {
-            int count = 0;
-
-            for (int i = -1; i < 2; i++)
-            {
-                for (int j = -1; j < 2; j++)
-                {
-                    var col = (x + i + cols) % cols;
-                    var row = (y + j + rows) % rows;
-
-                    var isSelfChecking = col == x && row == y;
-
-                    if (field_[col, row] == code && !isSelfChecking)
-                        count++;
-                }
-            }
-
-            return count;
         }
 
         public bool ValidateCellPosition(int x, int y)
@@ -155,6 +141,11 @@ namespace Life_Game
         public void RemoveCell(int x, int y)
         {
             UpdateCell(x, y, state: 0);
+        }
+
+        ~GameEngine()
+        {
+
         }
     }
 }

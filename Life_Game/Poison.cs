@@ -9,7 +9,6 @@ namespace Life_Game
 {
     public class Poison : Cell
     {
-
         public Poison(int type, int density, Brush color)
         {
             this.type = type;

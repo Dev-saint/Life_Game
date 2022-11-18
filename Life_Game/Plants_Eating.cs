@@ -9,16 +9,10 @@ namespace Life_Game
 {
     public class Plants_Eating : Cell
     {
-        /*public Plants_Eating(int density, Cell cell) : base(cell)
-        {
-            type = 1;
-            this.density = density;
-            color = Brushes.Blue;
-        }*/
-
         public Plants_Eating(int type, int density, Brush color)
         {
-            this.type = type;
+            base.type = new int();
+            base.type = type;
             this.density = density;
             this.color = color;
         }

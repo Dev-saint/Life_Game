@@ -1,5 +1,4 @@
-﻿
-namespace Life_Game
+﻿namespace Life_Game
 {
     partial class Form1
     {
@@ -30,11 +29,8 @@ namespace Life_Game
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.listBoxTypesOfCells = new System.Windows.Forms.ListBox();
-            this.pictureBoxStop = new System.Windows.Forms.PictureBox();
-            this.pictureBoxStart = new System.Windows.Forms.PictureBox();
             this.numericUpDown_FoodBirth = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.numericUpDown_DensityPoison = new System.Windows.Forms.NumericUpDown();
@@ -49,14 +45,14 @@ namespace Life_Game
             this.label2 = new System.Windows.Forms.Label();
             this.numericUpDown_Resolution = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.pictureBoxStop = new System.Windows.Forms.PictureBox();
+            this.pictureBoxStart = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStop)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_FoodBirth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_DensityPoison)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_DensityFood)).BeginInit();
@@ -64,6 +60,8 @@ namespace Life_Game
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Timer)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_DensityPlantsEating)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Resolution)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStop)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -117,30 +115,6 @@ namespace Life_Game
             this.listBoxTypesOfCells.Name = "listBoxTypesOfCells";
             this.listBoxTypesOfCells.Size = new System.Drawing.Size(166, 124);
             this.listBoxTypesOfCells.TabIndex = 19;
-            // 
-            // pictureBoxStop
-            // 
-            this.pictureBoxStop.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxStop.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxStop.Image")));
-            this.pictureBoxStop.Location = new System.Drawing.Point(10, 480);
-            this.pictureBoxStop.Name = "pictureBoxStop";
-            this.pictureBoxStop.Size = new System.Drawing.Size(61, 59);
-            this.pictureBoxStop.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxStop.TabIndex = 20;
-            this.pictureBoxStop.TabStop = false;
-            this.pictureBoxStop.Click += new System.EventHandler(this.pictureBoxStop_Click);
-            // 
-            // pictureBoxStart
-            // 
-            this.pictureBoxStart.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBoxStart.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxStart.Image")));
-            this.pictureBoxStart.Location = new System.Drawing.Point(10, 415);
-            this.pictureBoxStart.Name = "pictureBoxStart";
-            this.pictureBoxStart.Size = new System.Drawing.Size(61, 59);
-            this.pictureBoxStart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxStart.TabIndex = 19;
-            this.pictureBoxStart.TabStop = false;
-            this.pictureBoxStart.Click += new System.EventHandler(this.pictureBoxStart_Click);
             // 
             // numericUpDown_FoodBirth
             // 
@@ -363,6 +337,35 @@ namespace Life_Game
             this.label1.TabIndex = 0;
             this.label1.Text = "Разрешение";
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 40;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // pictureBoxStop
+            // 
+            this.pictureBoxStop.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxStop.Image = global::Life_Game.Resource1.pictureBoxStop_Image;
+            this.pictureBoxStop.Location = new System.Drawing.Point(10, 480);
+            this.pictureBoxStop.Name = "pictureBoxStop";
+            this.pictureBoxStop.Size = new System.Drawing.Size(61, 59);
+            this.pictureBoxStop.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxStop.TabIndex = 20;
+            this.pictureBoxStop.TabStop = false;
+            this.pictureBoxStop.Click += new System.EventHandler(this.pictureBoxStop_Click);
+            // 
+            // pictureBoxStart
+            // 
+            this.pictureBoxStart.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBoxStart.Image = global::Life_Game.Resource1.pictureBoxStart_Image;
+            this.pictureBoxStart.Location = new System.Drawing.Point(10, 415);
+            this.pictureBoxStart.Name = "pictureBoxStart";
+            this.pictureBoxStart.Size = new System.Drawing.Size(61, 59);
+            this.pictureBoxStart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxStart.TabIndex = 19;
+            this.pictureBoxStart.TabStop = false;
+            this.pictureBoxStart.Click += new System.EventHandler(this.pictureBoxStart_Click);
+            // 
             // pictureBox1
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -372,11 +375,6 @@ namespace Life_Game
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
-            // 
-            // timer1
-            // 
-            this.timer1.Interval = 40;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form1
             // 
@@ -392,8 +390,6 @@ namespace Life_Game
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStop)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_FoodBirth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_DensityPoison)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_DensityFood)).EndInit();
@@ -401,6 +397,8 @@ namespace Life_Game
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Timer)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_DensityPlantsEating)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_Resolution)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStop)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
@@ -430,4 +428,3 @@ namespace Life_Game
         private System.Windows.Forms.PictureBox pictureBoxStop;
     }
 }
-

@@ -9,7 +9,6 @@ namespace Life_Game
 {
     public class Predator : Cell
     {
-
         public Predator(int type, int density, Brush color)
         {
             this.type = type;

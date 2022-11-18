@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,29 +13,21 @@ namespace Life_Game
     public partial class Form1 : Form
     {
 
-        protected int resolution;
+        public int resolution;
         private int densityPlantsEating;
         private int densityPredators;
         private int densityFood;
         private int densityPoison;
         private int foodBirthChance;
-        protected int cols;
-        protected int rows;
-        protected GameEngine gameEngine;
-        protected Field field;
-        protected Cell dead_cell;
-        protected Plants_Eating plants_Eating;
-        protected Predator predator;
-        protected Food food;
-        protected Poison poison;
-
-        public Plants_Eating Plants_Eating { get => plants_Eating; set => plants_Eating = value; }
-        public Predator Predator { get => predator; set => predator = value; }
-        public Food Food { get => food; set => food = value; }
-        public Poison Poison { get => poison; set => poison = value; }
-        public int Cols { get => cols; set => cols = value; }
-        public int Rows { get => rows; set => rows = value; }
-        public int Resolution { get => resolution; set => resolution = value; }
+        private int cols;
+        private int rows;
+        private GameEngine gameEngine;
+        private Field field;
+        private Cell dead_cell;
+        private Plants_Eating plants_Eating;
+        private Predator predator;
+        private Food food;
+        private Poison poison;
 
         public Form1()
         {
@@ -64,15 +55,15 @@ namespace Life_Game
             rows = pictureBox1.Height / resolution;
             cols = pictureBox1.Width / resolution;
 
-            field = new Field(this, gameEngine);
-
-            dead_cell = new Cell(gameEngine);
+            dead_cell = new Cell();
             plants_Eating = new Plants_Eating(1, densityPlantsEating, Brushes.Blue);
             predator = new Predator(2, densityPredators, Brushes.Crimson);
             food = new Food(3, densityFood, Brushes.LawnGreen, foodBirthChance);
             poison = new Poison(4, densityPoison, Brushes.Purple);
 
-            gameEngine = new GameEngine(this); 
+            field = new Field(this, resolution, dead_cell, plants_Eating, predator, food, poison);
+            gameEngine = new GameEngine(rows, cols,
+                dead_cell, plants_Eating, predator, food, poison);
 
             Text = $"Поколение {gameEngine.currentGeneration}";
 
@@ -86,8 +77,8 @@ namespace Life_Game
 
         private void DrawNextGeneration()
         {
-            //var field_ = gameEngine.GetCurrentGeneration();
-            field.DrawNextGenerationField();
+            var field_ = gameEngine.GetCurrentGeneration();
+            field.DrawNextGenerationField(field_);
             Text = $"Поколение {gameEngine.currentGeneration}";
             gameEngine.NextGeneration();
         }
@@ -122,17 +113,17 @@ namespace Life_Game
                     var y = e.Location.Y / resolution;
 
                     if (listBoxTypesOfCells.SelectedIndex == 0)
-                        type = 1;
+                        type = plants_Eating.type;
                     else
                         if (listBoxTypesOfCells.SelectedIndex == 1)
-                        type = 2;
+                        type = predator.type;
                     else
                         if (listBoxTypesOfCells.SelectedIndex == 2)
-                        type = 3;
+                        type = food.type;
                     else
                         if (listBoxTypesOfCells.SelectedIndex == 3)
-                        type = 4;
-                    
+                        type = poison.type;
+
 
                     gameEngine.AddCell(x, y, type);
                 }
